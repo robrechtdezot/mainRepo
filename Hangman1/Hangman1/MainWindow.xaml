@@ -1,0 +1,15 @@
+﻿<Window x:Class="Hangman1.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Hangman1"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800" WindowStartupLocation="CenterOwner">
+    <Grid>
+        <TextBox x:Name="Hangman" HorizontalAlignment="Center" Margin="0,24,0,0" TextWrapping="Wrap" Text="Hangman" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="71" Width="536" FontSize="48" FontWeight="Bold"/>
+        <Button x:Name="Start_game" Content="Start Game" HorizontalAlignment="Center" Margin="0,217,0,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="64" Width="169" Click="Start_game_Click" FontSize="20"/>
+
+
+    </Grid>
+</Window>
