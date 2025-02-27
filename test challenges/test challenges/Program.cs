@@ -30,7 +30,7 @@ namespace test_challenges
                     Console.WriteLine("No repeated characters");
                     break;
                 }
-            }
+            }//hallo
         }
     }
 }
