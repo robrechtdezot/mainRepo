@@ -9,7 +9,14 @@
     <Grid>
 
         <TextBox x:Name="Hangman" HorizontalAlignment="Center" Margin="0,24,0,0" TextWrapping="Wrap" Text="Hangman" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="71" Width="536" FontSize="48" FontWeight="Bold"/>
-        <TextBox  Width="428"  VerticalAlignment="Top" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" x:Name="SearchTermTextBox" Margin="0,231,0,0" Height="99" RenderTransformOrigin="0.5,0.5" FontSize="20" FontStyle="Italic">
+        
+                </Style>
+            </TextBox.Style>
+        </TextBox>
+
+    </Grid>
+</Window>
+<TextBox  Width="428"  VerticalAlignment="Top" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" x:Name="SearchTermTextBox" Margin="0,231,0,0" Height="99" RenderTransformOrigin="0.5,0.5" FontSize="20" FontStyle="Italic">
             <TextBox.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform ScaleY="0.66"/>
@@ -17,9 +24,10 @@
                     <RotateTransform Angle="0.012"/>
                     <TranslateTransform/>
                 </TransformGroup>
-            </TextBox.RenderTransform>
+        
+    </TextBox.RenderTransform>
         </TextBox>
-        <TextBox IsHitTestVisible="False" Text="Enter Search Term Here" VerticalAlignment="Top" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="DarkGray" Height="67" Width="428" RenderTransformOrigin="0.5,0.5" FontSize="20" Margin="0,244,0,0">
+        <TextBox IsHitTestVisible="False" Text="Please enter your secret word" VerticalAlignment="Top" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="DarkGray" Height="67" Width="428" RenderTransformOrigin="0.5,0.5" FontSize="20" Margin="0,244,0,0">
             <TextBox.Style>
                 <Style TargetType="{x:Type TextBox}">
                     <Setter Property="Visibility" Value="Collapsed"/>
@@ -28,9 +36,3 @@
                             <Setter Property="Visibility" Value="Visible"/>
                         </DataTrigger>
                     </Style.Triggers>
-                </Style>
-            </TextBox.Style>
-        </TextBox>
-
-    </Grid>
-</Window>
