@@ -6,6 +6,8 @@ namespace CodeManager
 {
     public partial class MainWindow : Window
     {
+        private CodeFile selectedCodeFile;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -67,8 +69,8 @@ namespace CodeManager
             using (var db = new CodeManagerContext())
             {
                 var result = db.CodeFiles
-                    .Where(c => c.FileName.ToLower().Contains(searchTerm.ToLower()))
-                    .FirstOrDefault();
+                    .Where(c => c.FileName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+                    .FirstOrDefault(); // Retrieve the first match
 
                 if (result != null)
                 {
@@ -78,6 +80,43 @@ namespace CodeManager
                 {
                     SearchResultTextBlock.Text = "No file found matching the search term.";
                 }
+            }
+        }
+
+        private void CodeFileList_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (CodeFileList.SelectedItem != null)
+            {
+                var selectedItem = CodeFileList.SelectedItem.ToString();
+                string fileName = selectedItem.Split('-')[0].Trim();
+
+                using (var db = new CodeManagerContext())
+                {
+                    selectedCodeFile = db.CodeFiles
+                        .FirstOrDefault(c => c.FileName == fileName);
+
+                    if (selectedCodeFile != null)
+                    {
+                        DeleteButton.IsEnabled = true; // Enable the delete button
+                    }
+                }
+            }
+        }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (selectedCodeFile != null)
+            {
+                using (var db = new CodeManagerContext())
+                {
+                    db.CodeFiles.Remove(selectedCodeFile);
+                    db.SaveChanges();
+                }
+
+                MessageBox.Show($"File '{selectedCodeFile.FileName}' deleted.");
+                selectedCodeFile = null; // Clear the selection
+                DeleteButton.IsEnabled = false; // Disable delete button
+                LoadCodeFiles(); // Reload the list of files
             }
         }
     }
