@@ -67,8 +67,8 @@ namespace CodeManager
             using (var db = new CodeManagerContext())
             {
                 var result = db.CodeFiles
-                    .Where(c => c.FileName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
-                    .FirstOrDefault(); // Retrieve the first match
+                    .Where(c => c.FileName.ToLower().Contains(searchTerm.ToLower()))
+                    .FirstOrDefault();
 
                 if (result != null)
                 {
