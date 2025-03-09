@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Windows;
 
@@ -18,7 +19,7 @@ namespace CodeManager
         {
             string fileName = FileNameTextBox.Text;
             string codeContent = CodeContentTextBox.Text;
-
+            
             if (!string.IsNullOrEmpty(fileName) && !string.IsNullOrEmpty(codeContent))
             {
                 using (var db = new CodeManagerContext())
@@ -66,20 +67,39 @@ namespace CodeManager
                 return;
             }
 
-            using (var db = new CodeManagerContext())
+            try
             {
-                var result = db.CodeFiles
-                    .Where(c => c.FileName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
-                    .FirstOrDefault(); // Retrieve the first match
+                using (var db = new CodeManagerContext())
+                {
+                    // Check if the CodeFiles table exists and is accessible
+                    if (db.Database.CanConnect())
+                    {
+                        // Use LINQ with SQL LIKE for case-insensitive search
+                        var result = db.CodeFiles
+                            .Where(c => EF.Functions.Like(c.FileName, $"%{searchTerm}%"))
+                            .FirstOrDefault(); // Retrieve the first match
 
-                if (result != null)
-                {
-                    SearchResultTextBlock.Text = $"File: {result.FileName}\nCode:\n{result.CodeContent}";
+                        if (result != null)
+                        {
+                            // If a match is found, display the file name and content
+                            SearchResultTextBlock.Text = $"File: {result.FileName}\nCode:\n{result.CodeContent}";
+                        }
+                        else
+                        {
+                            // If no match is found
+                            SearchResultTextBlock.Text = "No file found matching the search term.";
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Could not connect to the database.", "Database Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                 }
-                else
-                {
-                    SearchResultTextBlock.Text = "No file found matching the search term.";
-                }
+            }
+            catch (Exception ex)
+            {
+                // Log and display the exception details
+                MessageBox.Show($"An error occurred while searching for the file: {ex.Message}\n{ex.StackTrace}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
