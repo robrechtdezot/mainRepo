@@ -1,25 +1,15 @@
-﻿using System.Text;
+﻿using System;
+using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
-namespace CodeManager;
-
-/// <summary>
-/// Interaction logic for MainWindow.xaml
-/// </summary>
-public partial class MainWindow : Window
+namespace CodeManager
 {
-    public MainWindow()
+    public partial class MainWindow : Window
+    {
+        public MainWindow()
         {
-        InitializeComponent();
-        LoadCodeFiles();
+            InitializeComponent();
+            LoadCodeFiles();
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
@@ -63,8 +53,32 @@ public partial class MainWindow : Window
                 }
             }
         }
-    }
-}
 
+        private void SearchButton_Click(object sender, RoutedEventArgs e)
+        {
+            string searchTerm = SearchTextBox.Text;
+
+            if (string.IsNullOrEmpty(searchTerm))
+            {
+                MessageBox.Show("Please enter a search term.");
+                return;
+            }
+
+            using (var db = new CodeManagerContext())
+            {
+                var result = db.CodeFiles
+                    .Where(c => c.FileName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+                    .FirstOrDefault(); // Retrieve the first match
+
+                if (result != null)
+                {
+                    SearchResultTextBlock.Text = $"File: {result.FileName}\nCode:\n{result.CodeContent}";
+                }
+                else
+                {
+                    SearchResultTextBlock.Text = "No file found matching the search term.";
+                }
+            }
+        }
     }
 }
